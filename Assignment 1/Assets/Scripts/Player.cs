@@ -5,11 +5,16 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed;
+    private Rigidbody rb;
+
+    
     public GameObject bullet;
     public Transform firePoint;
     public GameObject slowEffect;
 
+    [Header("Mouse Controll view")]
     public Transform characterBody;
     public Transform cameraTransform;
     public float mouseSensitivity = 7f;
@@ -19,31 +24,24 @@ public class Player : MonoBehaviour
     public float mouseYInput;
     private float xRotation = 0f;
 
-    public void Follow()
-    {
-
-    }
-
     // Start is called before the first frame update
     void Start()
     {
         moveSpeed = 3;
-        // 마우스 커서를 화면안에 잠금
-        Cursor.lockState = CursorLockMode.Locked;
+        rb = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서를 화면안에 잠금
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Shoot();
-        }
-
+        if (Input.GetMouseButtonDown(0)) { Shoot(); }
         OnBulletTime();
-
         PlayerView();
-
+        
+    }
+    private void FixedUpdate()
+    {
         Move();
     }
 
@@ -79,8 +77,9 @@ public class Player : MonoBehaviour
 
     void Move()
     {
+        // xz 평면상에서 움직임 입력
         Vector2 targetVelocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, Input.GetAxis("Vertical") * moveSpeed);
-        transform.position += transform.rotation * new Vector3(targetVelocity.x, 0, targetVelocity.y) * Time.deltaTime;
+        rb.velocity = transform.rotation * new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.y);
     }
 
     void Shoot()
