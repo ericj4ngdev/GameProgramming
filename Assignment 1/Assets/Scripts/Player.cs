@@ -86,4 +86,9 @@ public class Player : MonoBehaviour
     {
         Instantiate(bullet, firePoint);
     }
+
+    public void TakeDamage()
+    {
+        Debug.Log("Player Damaged");
+    }
 }
