@@ -9,10 +9,11 @@ public class Player : MonoBehaviour
     public float moveSpeed;
     private Rigidbody rb;
 
-    
+    public float hp;
     public GameObject bullet;
     public Transform firePoint;
     public GameObject slowEffect;
+    public ParticleSystem muzzleEffect;
 
     [Header("Mouse Controll view")]
     public Transform characterBody;
@@ -85,10 +86,15 @@ public class Player : MonoBehaviour
     void Shoot()
     {
         Instantiate(bullet, firePoint);
+        muzzleEffect.Play();
     }
+
+
 
     public void TakeDamage()
     {
         Debug.Log("Player Damaged");
+        if (hp > 0) hp--;
+        else hp = 0;
     }
 }

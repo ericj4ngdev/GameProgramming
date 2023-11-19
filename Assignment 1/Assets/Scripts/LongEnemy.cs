@@ -20,6 +20,7 @@ public class LongEnemy : Enemy
 
     private EnemyState enemyState = EnemyState.None;    // 현재 적 행동
     private float lastAttackTime = 0;                   // 공격 주기 계산용 변수 
+    
 
     [SerializeField] private Player target;                           // 적의 공격 대상(플레이어)
 
@@ -32,7 +33,6 @@ public class LongEnemy : Enemy
         WaveSpawner.Instance.tLeftMonster.text = WaveSpawner.Instance.leftMoster.ToString();
         // 점수 추가
         // 남은 몬스터 수 줄기
-
         // Destroy(gameObject);        // 나중에 체력에 따른 제거 조건 다르게 하기
     }
 

@@ -44,7 +44,11 @@ public class WaveSpawner : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI tLeftTime;
     public TextMeshProUGUI tLeftMonster;
+    public Slider hpBar;
 
+
+    public Player player;
+    private float playerHp;
     // public Vector3 spawnCenter;
     public Vector3 spawnRange;
 
@@ -53,6 +57,9 @@ public class WaveSpawner : MonoBehaviour
     void Start()
     {
         tLeftTime.text = leftTime.ToString();
+        player = FindObjectOfType<Player>();
+        
+        playerHp = player.hp;
         InvokeRepeating("Spawn", 0, spawnRate);
         StartCoroutine(Timer());
         StartCoroutine(CheckObjective());
@@ -71,7 +78,10 @@ public class WaveSpawner : MonoBehaviour
         leftMoster++;
         tLeftMonster.text = leftMoster.ToString();
     }
-
+    private void Update()
+    {
+        hpBar.value = player.hp / playerHp;
+    }
     IEnumerator Timer()
     {
         yield return new WaitUntil(() => leftMoster >= 20);
@@ -85,11 +95,19 @@ public class WaveSpawner : MonoBehaviour
         print("Timer coroutine end");
     }
 
+    
+
     IEnumerator CheckObjective()
     {
-        yield return new WaitUntil(() => leftMoster >= 20);
+        yield return new WaitUntil(() => leftMoster >= 1);
         while (true)
         {
+            if(player.hp == 0)
+            {
+                Debug.Log("Lose");
+                SceneManager.LoadScene("Lose");
+                break;
+            }
             if (leftTime > 0)
             {
                 if (leftMoster == 0)

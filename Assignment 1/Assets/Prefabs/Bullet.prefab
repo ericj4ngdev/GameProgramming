@@ -148,3 +148,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   time: 0
+  deadEffect: {fileID: 247816648163095456, guid: a3a263ef35caea542b96a0bb64a7524c, type: 3}

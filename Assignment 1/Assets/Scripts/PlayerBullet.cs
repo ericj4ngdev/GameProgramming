@@ -6,6 +6,7 @@ public class PlayerBullet : MonoBehaviour
 {
     public float speed;
     public float time;
+    public ParticleSystem deadEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +29,7 @@ public class PlayerBullet : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            Instantiate(deadEffect, other.transform.position, Quaternion.Euler(new Vector3(-90,0,0)) );
             other.GetComponent<Enemy>().TakeDamage();
             Destroy(gameObject);
         }
