@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,11 @@ public class Player : MonoBehaviour
     public Transform firePoint;
     public GameObject slowEffect;
     public ParticleSystem muzzleEffect;
+    public AudioSource shootSound;
+
+    [Header("Pause")]
+    public GameObject pauseUI;
+    private bool isPaused = false;
 
     [Header("Mouse Controll view")]
     public Transform characterBody;
@@ -35,12 +41,50 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {   
+        if (Input.GetKeyDown(KeyCode.Escape)) { Pause(); }
+    }
+
+    private void GetControl()
     {
         if (Input.GetMouseButtonDown(0)) { Shoot(); }
         OnBulletTime();
         PlayerView();
-        
     }
+
+    private void Pause()
+    {
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            StopCoroutine(Control());
+            moveSpeed = 0;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0; // 게임 시간을 정지합니다.
+            pauseUI.SetActive(true); // 일시정지 UI를 활성화합니다.
+        }
+        else
+        {
+            StartCoroutine(Control());
+            moveSpeed = 5;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1; // 게임 시간을 다시 시작합니다.
+            pauseUI.SetActive(false); // 일시정지 UI를 비활성화합니다.
+        }
+    }
+    
+    IEnumerator Control()
+    {
+        while (!isPaused)
+        {
+            GetControl();
+            yield return null;
+        }
+    }
+
     private void FixedUpdate()
     {
         Move();
@@ -87,6 +131,7 @@ public class Player : MonoBehaviour
     {
         Instantiate(bullet, firePoint);
         muzzleEffect.Play();
+        shootSound.Play();
     }
 
 
